@@ -3,15 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poznávačka</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./icon.png">
+    <title>Poznávání přírodnin</title>
 </head>
 <body>
-    <h1>Poznávačka</h1>
-    <p><a href="https://jenikh.github.io/github/"><img src="https://github.com/favicon.ico" alt="GitHub">GitHub</a></p>
-    <a href="./roky.html"><button>Roky</button></a>
-    <script>const lin = document.head.appendChild(document.createElement("link"));
-lin.rel = "icon";
-lin.href = "icon.png";
-</script>
+    <div class="container text-center">
+        <header>
+            <h1>Poznávání přírodnin</h1>
+        </header>
+        <main>
+            <nav class="button-container">
+                <a href="https://jenikh.github.io/github/" target="_blank" rel="noopener noreferrer" class="button github-link" style="display: none;">
+                    GitHub
+                </a>
+                <a href="./roky.html" class="button">1. stupeň</a>
+                <a href="./diky.html" class="button">Poděkování a kontribuce</a>
+            </nav>
+        </main>
+    </div>
 </body>
 </html>

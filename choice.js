@@ -4,6 +4,15 @@ function min(num,minimal) {
     }
     return num;
 }
+async function assignUniqueValue(element, f, cannot_be_aggin) {
+    let value = await pickfromdict(f); // wait for the async function
+    while (cannot_be_aggin.includes(value)) {
+        value = await pickfromdict(f);
+    }
+    element.value = value;
+    cannot_be_aggin.push(value);
+}
+
 function randomInt(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
@@ -14,8 +23,24 @@ function log(message, ln = 1) {
         console.warn("Enable logging to see logs!\nYou might be asking why? and thats becouse i dont want ANYONE snooping around!")
     }
 }
-function iglog(message,message2="",message3="",message4="") {
-        console.log(message,message2,message3,message4);
+function iglog(message, message2 = "", message3 = "", message4 = "") {
+    if (message == "" && message2 == "" && message3 == "" && message4 == "") {
+        return;
+    }
+    if (message2 == "" && message3 == "" && message4 == "") {
+        console.log(message);
+        return;
+    }
+    if (message3 == "" && message4 == "") {
+        console.log(message, message2);
+        return;
+    }
+    if (message4 == "") {
+        console.log(message, message2, message3);
+        return;
+    }
+    
+    console.log(message,message2,message3,message4);
 }
 iglog(`Trenázer v1.1.0`);
 setCookie(`test_is_running`, true, 1);
@@ -228,16 +253,14 @@ async function createAlertGoodBad(mr,mg) {
     });
 }
 
-async function createYesNoAlert(message,str_msg="") {
+async function createYesNoAlert(message) {
     return new Promise(resolve => {
         const alertDiv = document.createElement("div");
         alertDiv.className = "custom-alert";
 
         const messageDiv = document.createElement("div");
         messageDiv.className = "alert-message";
-        const strong = document.createElement("strong");
-        strong.textContent = str_msg;
-        messageDiv.innerHTML = message + strong.outerHTML;
+        messageDiv.textContent = message;
 
         const buttonContainer = document.createElement('div');
         buttonContainer.className = 'alert-buttons';
@@ -298,16 +321,18 @@ async function fetchContent(url) {
                 return {};
             }
 }
+async function pickfromdict(dict) {
+    return dict[Math.floor(Math.random() * dict.length)];
+}
 //#endregion Základ
 async function main() {
     (async () => {
        
-        if (getCookie("streak") == undefined) {
-            setCookie("streak", 0, 1);
+        if (getCookie("streak_ch") == undefined) {
+            setCookie("streak_ch", 0, 1);
         }
         log(`Test: Activated`);
         document.getElementById(`title`).textContent = `Poznávání přírodnin - Test`;
-        document.getElementById(`style`).href = `./test.css`;
 
         year = getParam(`y`);
         log(year)
@@ -315,8 +340,8 @@ async function main() {
 
         const f = await fetchContent(`years/${year}/names.json`)
         //#region Streak Alerty
-        setCookie("streak",Math.round(getCookie("streak")),1)
-        if (getCookie("streak") == 1) {
+        setCookie("streak",Math.round(getCookie("streak_ch")),1)
+        if (getCookie("streak_ch") == 1) {
             createAlertGood("Velmi dobře!\nMáte jedno kompletně správné cvičení za sebou.")
             if (await createYesNoAlert("Baví vás to?")) {
                 createAlert("Děkujeme!")
@@ -324,14 +349,14 @@ async function main() {
                 createAlert("Děkujeme i tak!\nNic se nezmění!\n (Ani by se nezměnilo)")
             }
         }
-        else if (getCookie("streak") == 2) {
+        else if (getCookie("streak_ch") == 2) {
             createAlertGood("Velmi dobře!\nMáte dvě kompletně správná cvičení za sebou.")
-        } else if (getCookie("streak") == 3) {
+        } else if (getCookie("streak_ch") == 3) {
             createAlertGood("Velmi dobře!\nMáte tři kompletně správná cvičení za sebou.")
-        } else if (getCookie("streak") == 4) {
+        } else if (getCookie("streak_ch") == 4) {
             createAlertGood("Velmi dobře!\nMáte čtyři kompletně správná cvičení za sebou.")
-        } else if (!(getCookie("streak") == 0)) {
-            createAlertGood(`Velmi dobře!\nMáte "${convertIntToText(getCookie("streak"))}" kompletně správných cvičení za sebou.`)
+        } else if (!(getCookie("streak_ch") == 0)) {
+            createAlertGood(`Velmi dobře!\nMáte "${convertIntToText(getCookie("streak_ch"))}" kompletně správných cvičení za sebou.`)
         }
         //#endregion Streak Alerty
         
@@ -344,233 +369,59 @@ async function main() {
         log("NOW BOX HANDLE")
         log(totalQuestions)
         //#region Box Handle
+        const box_list = []
+        const box_dict = {}
+        const desc_dict = {}
         const d = document.createElement(`div`);
         d.className = `trenazer`;
-
-        const usedPics = new Set();
-
+        const box_count = 4;
         for (let i = 1; i <= totalQuestions; i++) {
-            let number_pic;
-            do {
-                log(usedPics)
-                number_pic = randomInt(1, len);
-            } while (usedPics.has(number_pic));
-            usedPics.add(number_pic);
-
             const div = document.createElement(`div`);
+            const boxes = [];
+            var box;
+            var id;
+            var label;
+            for (let j = 0; j < box_count; j++) {
+                label = document.createElement("label")
+                
+                box = document.createElement("input")
+                box.type = "checkbox";
+                box.checked = false;
+                var id = randomInt(1, 100000000000000000000000000)
+                box.id = id;
+                label.for = box.id
+                desc_dict[box] = label;
+                label.innerHTML = "I have a boat"
+                boxes.push(box);
+                boxes.push(label);
+            }
+            log(boxes)
+            box_list.push(boxes);
             div.className = i === 1 ? `active` : `inactive`;
             div.style.display = i === 1 ? `block` : `none`;
             div.id = `box-${i}`;
-            div.innerHTML = create_img(number_pic);
-            div.innerHTML += `<!--[${f[number_pic][0]},${f[number_pic][1]}]-->`;
+            for (let j = 0; j < box_count; j++) {
+                div.appendChild(boxes[j]);
+            }
             d.appendChild(div);
+            div.innerHTML += `<!--[${f[i][0]},${f[i][1]}]-->`;
         }
-
         document.body.appendChild(d);
+        console.log(box_list)
         //#endregion Box Handle
-        //#region 
-        const input = document.createElement(`input`);
-        input.id = `input`;
-        input.autocorrect = `off`;
-        input.autocapitalize = `off`;
-        input.spellcheck = false;
-        input.autofocus = true;
-        input.autocomplete = `off`;
-
-        const button = document.getElementById("Check");
-        button.type = `submit`;
-        button.value = `Ověřit`;
-
-        const exit = document.createElement(`input`);
-        exit.type = `submit`;
-        exit.value = `Konec`;
-        exit.className = "button"
-        exit.style.backgroundColor = "red";
-        exit.style.color = "white";
-        exit.onclick = async () => {
-            if (!await createYesNoAlert("Opravdu chcete ","ukončit test?")) {
-                return;
+        for (let i = 0; i < box_list.length; i++) {
+            const cannot_be_aggin = []
+            const e = box_list[i];
+            for (let j = 0; j < e.length; j++) {
+                const element = e[j];
+                await assignUniqueValue(element, f, cannot_be_aggin)
+                const label = document.createElement("label")
+                label.for = element.id
+                label.innerHTML = "I have a boat"
+            
             }
-            if (exit.value == "Super tajné talčítko!") {
-                await createAlertGood("BAM STŘÍLEČKA V KÓDU!")
-                var s = document.createElement('script')
-                s.type = 'text/javascript'
-                document.body.appendChild(s);
-                s.src = './strilecka.js'
-                exit.disabled = true;
-                button.disabled = true;
-                input.disabled = true;
-                setCookie("test_is_running", false, 1);
-                for (let index = 0; index < document.getElementById("trenazer").children.length; index++) {
-                    const element = document.getElementById("trenazer").children[index];
-                    element.style.display = "";
-                }
-                
-                return;
-            }
-            setCookie("test_is_running", false, 1);
-            goToWeb(`./year.html?y=${year}`);
+            
         }
-        // Proč jsem to neudělal dřív
-        const c_element = document.getElementById("content_b").parentNode
-        c_element.removeChild(c_element.firstChild)
-        document.body.removeChild(c_element)
-        const inputContainer = document.createElement(`div`);
-        inputContainer.id = `input-container`;
-        inputContainer.appendChild(input);
-        inputContainer.appendChild(document.createElement(`br`));
-        inputContainer.appendChild(button);
-        inputContainer.appendChild(document.createElement(`br`));
-        inputContainer.appendChild(exit)
-        document.getElementById("cnt").removeChild(document.getElementById("zpet"))
-        document.body.appendChild(inputContainer);
-
-        button.onclick = async () => {
-            input.focus()
-            let active = document.querySelector(`.active`);
-            if (!active) {
-                button.disabled = false;
-                let next = document.getElementById(`box-${currentIndex}`);
-                // box-1 a nebo box-30
-                if (next == null) {
-                    let next = document.getElementById(`box-${currentIndex + randomInt(-1, 1)}`)
-                }
-                if (next == null) {
-                    let a = 0
-                    while (next == null) {
-                        next = document.getElementById(`box-${randomInt(1, totalQuestions)}`);
-                        a++;
-                        if (a >= totalQuestions) { 
-                            if (currentIndex > totalQuestions) {
-                score = totalQuestions * 2
-                await createAlert(`Test hotov! Body: ${score} / ${totalQuestions * 2}`);
-                setCookie(`test_is_running`, false, 1);
-                if ((totalQuestions * 2) == score) {
-                    log("Very good!")
-                    setCookie("streak", Number(getCookie("streak")) + 1, 1);
-                }
-                                if (await createYesNoAlert(`Chcete znovu pustit test?`)) {
-                                    location.reload();
-                                } else {
-                                    goToWeb(`./roky.html`);
-                                }}
-                        }
-                    }
-                }
-                next.className = `active`;
-                next.style.display = `block`;
-                input.value = ``;
-                input.focus();
-                setCookie(`test_is_running`, true, 1);
-                return;
-            };
-            const comment = active.innerHTML.split(`<!--[`)[1]?.split(`]-->`)[0];
-            
-            const [correctFirst, correctSecond] = comment.split(`,`);
-            const answer = input.value.trim().toLowerCase().split(` `);
-            log(answer);
-            log(correctFirst);
-            log(correctSecond);
-            let bad_answer_1 = false;
-            let bad_answer_2 = false;
-            if (answer[0] == `tajemstvi`) {
-                await createAlertGood("Žádné tajnosti! (:")
-                exit.value = "Super tajné talčítko!";
-                return;
-            }
-            if (answer.length === 1) {
-                answer.push(` _g_`);
-            } else if (answer.length !== 2) {
-                input.value = ``;
-                log(answer.length)
-                log(`Invalid answer`);
-                return;
-            }
-            
-            aic = await answerIsCorrect(answer[0], correctFirst)
-            aic_2 = await answerIsCorrect(answer[1], correctSecond)
-            log(aic)
-            log(aic_2)
-            ans_1 = aic.correct
-            ans_2 = aic_2.correct
-            i_1 = aic.t_c
-            i_2 = aic_2.t_c
-            if (i_1 == undefined && i_2 == undefined) {
-                i_1 = 0
-                i_2 = 0
-            } else if (i_1 == undefined) {
-                i_1 = 0
-            } else if (i_2 == undefined) {
-                i_2 = 0
-            }
-            if (ans_1) {
-                score += 1;
-            } else {
-                bad_answer_1 = true;
-            }
-
-            if (ans_2) {
-                score += 1;
-            } else {
-                bad_answer_2 = true;
-            }
-            
-            log(ans_1)
-            log(ans_2)
-
-            if (notifications_bad) {
-                if (bad_answer_1 && bad_answer_2) {
-                    button.disabled = true;
-                    await createAlertBad(`Nesprávná odpověď (celá)`,`Bylo to: ${correctFirst} ${correctSecond}`);
-                } else if (bad_answer_1) {
-                    button.disabled = true;
-                    await createAlertBad(`Nesprávné první jméno`,`Bylo to: ${correctFirst} ${correctSecond}`);
-                } else if (bad_answer_2) {
-                    button.disabled = true;
-                    await createAlertBad(`Nesprávné druhé jméno`,`Bylo to: ${correctFirst} ${correctSecond}`);
-                }
-                if (i_1 == 1 && i_2 == 1) {
-                    createAlertGoodBad("Dvě chyby v odpovědi ( 1 v prvním jménu, 1 v druhém jménu)","Ale je to správné!")
-                } else if (i_1 == 1) {
-                    createAlertGoodBad("Jedna chyba v prvním jménu","Ale je to správné!")
-                } else if (i_2 == 1) {
-                    createAlertGoodBad("Jedna chyba v druhém jménu","Ale je to správné!")
-                }
-            }
-
-
-            click_button = true;
-            active.className = `inactive`;
-            active.style.display = `none`;
-            currentIndex++;
-            
-            if (currentIndex > totalQuestions) {
-                //score = totalQuestions * 2
-                await createAlert(`Test hotov! Body: ${score} / ${totalQuestions * 2}`);
-                setCookie(`test_is_running`, false, 1);
-                if ((totalQuestions * 2) == score) {
-                    log("Very good!")
-                    setCookie("streak", Math.round(getCookie("streak") + Math.round(totalQuestions / 1.5, 1)));
-                }
-                if (await createYesNoAlert(`Chcete znovu pustit test?`)) {
-                    location.reload();
-                } else {
-                    goToWeb(`./roky.html`);
-                }
-            } else {
-                button.disabled = false;
-                let next = document.getElementById(`box-${currentIndex}`);
-                if (next == null) {
-                    let next = document.getElementById(`box-${currentIndex + randomInt(-1, 1)}`)
-                }
-                next.className = `active`;
-                next.style.display = `block`;
-                input.value = ``;
-                input.focus();
-                setCookie(`test_is_running`, true, 1);
-            }
-
-        };
     })();
 }
 

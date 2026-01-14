@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">POZOR CHEATOVÁNÍ DETEKOVÁNO</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./tools.js"></script>
+</head>
+<body class="cheating-page">
+    <main>
+        <h1 id="flash_red_blue">Neoprávněný přístup! učitel to zjistí za <strong id="countdown">10</strong> <span id="sekund_text">Sekund!</span></h1>
+    </main>
+    <script>
+        var c_count = getCookie("c_count")
+        if (c_count == undefined) {
+            setCookie("c_count", "1", 365)
+        }
+        else {
+            c_count = toString(parseInt(c_count) + 1)
+            if (c_count >= 2) {
+                setCookie("test_is_running", false, 1);
+                setCookie("c_count", "0", 365);
+                history.back()
+            }
+        }
+        var flsh_state = false;
+        var countdown = 10;
+        var flsh = document.getElementById("flash_red_blue");
+
+        var countdownElement = document.getElementById("countdown");
+        countdownElement.textContent = countdown;
+        var countdownInterval = setInterval(function() {
+            countdown--;
+            countdownElement.textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                history.back()
+            }
+            if (flsh_state == false) {
+                flsh.style.backgroundColor = "red";
+                flsh_state = true;
+            } else {
+                flsh.style.backgroundColor = "blue";
+                flsh_state = false;
+            }
+            if (countdown <= 4) {
+                if (countdown != 1) {document.getElementById("sekund_text").textContent = "Sekundy!";}
+                else {document.getElementById("sekund_text").textContent = "Sekunda!";}
+            } else if (countdown == 0) {
+                document.getElementById("sekund_text").textContent = "Sekund!";
+            }
+        
+        }, 1000);
+    </script>
+</body>
+</html>

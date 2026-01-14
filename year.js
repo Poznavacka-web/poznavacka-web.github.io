@@ -1,7 +1,19 @@
 const lin = document.head.appendChild(document.createElement("link"));
 lin.rel = "icon";
 lin.href = "icon.png";
+async function fetch_content(url) {
+        try { console.log(base_url) } catch (e) { 
+            base_url = "https://jenikh.github.io/poz_dat/";
+        }
+        try {
+            const response = await fetch(base_url + url);
+            return await response.json();
+        } catch (e) {
 
+            console.log("Chyba při načítání nebo parsování JSON:", e);
+            return null;
+        }
+    }
 async function main() {
     let year;
     try {
@@ -10,37 +22,24 @@ async function main() {
     } catch (e) {
         throw new Error("Neplatný rok: " + e.message);
     }
-
-    async function fetch_content(url) {
-        try {
-            const response = await fetch("https://jenikh.github.io/poz_dat/" + url);
-            return await response.json();
-        } catch (e) {
-            console.error("Chyba při načítání nebo parsování JSON:", e);
-            return null;
-        }
-    }
-
+    console.log(year)
     const names = await fetch_content("names.json");
-
     // Nastavení titulku
     let titleText;
+    console.log(year)
+    console.log(Number(year))
     const num_year = Number(year);
-    if (isNaN(num_year)) {
-        try {
-            titleText = "Rok " + (names?.[year] ?? year); // Fallback, pokud names[year] není
-        } catch (e) {
-            titleText = "Rok " + year;
-            console.error("Neplatný rok:", e.message);
-        }
-    } else {
-        titleText = `Poznávačka - Rok ${num_year}/${num_year + 1}`;
+        console.log("nan")
+    try {
+        titleText = names?.[year] ?? year; // Fallback, pokud names[year] není
+    } catch (e) {
+        titleText = year;
+        console.error("Neplatný rok:", e.message);
     }
 
-    document.getElementById("title").textContent = titleText;
-    document.getElementById("title_h1").textContent = titleText;
+    document.getElementById("title").textContent = "Poznávání přírodnin - " + titleText;
+    document.getElementById("title_h1").textContent ="Poznávání přírodnin - " + titleText;
 
-    const butt = document.getElementById("b_select");
     const trenazerParam = getParam("trenazer");
 
     console.log("Trenazer:", trenazerParam);
@@ -48,10 +47,7 @@ async function main() {
     if (trenazerParam === null) {
         console.log("Year:", year);
 
-        butt.addEventListener("click", () => {
-            document.getElementById("list_b").style.display = "block";
-            butt.style.display = "none";
-        });
+        
 
         document.getElementById("b_odpovedi").addEventListener("click", () => {
             goToWeb(`./year.html?y=${year}&trenazer=false`);

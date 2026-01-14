@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./ILOVEYOU.webp">
+    <title>Poděkování a kontribuce</title>
+</head>
+<body>
+    <div class="container text-center">
+        <header>
+            <h1>Poděkování a kontribuce</h1>
+        </header>
+        <main>
+            <nav class="button-container">
+                <a href="./index.html" class="button">Zpět</a>
+            </nav>
+            <h2>Poděkování</h2>
+            
+            <p style="color: white;">Programování: <strong style="color: black;">Jan Hanus</strong></p>
+            <p style="color: white;">Nápady a řežie: <strong style="color: black;">Iva Feltlová</strong></p>
+            <h2>Speciální poděkování</h2>
+            <ul>
+                <li>Pan ředitel</li>
+                <li>Paní učitelka Prušková</li>
+                <li onclick="//document.getElementById('pice').setAttribute('style', '');">Iva Hanusová</li>
+                <li style="display: none;" id="pice"><a href="https://www.popeyeschicken.cz/cs/">Popeyes</a></li>
+                <li><a href="https://www.github.com/">Github</a></li>
+                <li>A... <strong onclick="document.getElementById('debug').style = ''">Vy!</strong> Protože se koukáte na tuto stránku, která mi trvala udělat 2 týdny!</li>
+                
+            </ul>
+            <div id="debug" style="display: none;">
+                <p>Děkuji za koukání na tuto stránku!<br>Řeknite Janu Hanusovy ve škole že jste tuto věc našly!</p>
+                <a href="./choicetest.html?y=1" class="button">Kliknite sem aby jste byly magicky teleportováni / Crasher!</a>
+            </div>
+
+        </main>
+    </div>
+</body>
+</html>

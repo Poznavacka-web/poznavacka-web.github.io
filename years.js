@@ -17,6 +17,10 @@ async function loadYears() {
         return;
     }
 
+    const contentContainer = document.getElementById('content-roky');
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'button-container';
+
     data.years.forEach(yearStr => {
         let year_nm;
 
@@ -35,8 +39,10 @@ async function loadYears() {
             window.location.href = `./year.html?y=${year_nm}`;
         });
 
-        document.body.appendChild(button);
+        buttonContainer.appendChild(button);
     });
+
+    contentContainer.appendChild(buttonContainer);
 }
 
 loadYears();

@@ -1,33 +1,32 @@
 (async () => {
+    
     console.log(getCookie("test_is_running"));
+    const cheat_video = "./nenene.html"
     const year = getParam(`y`);
     const testRunning = getCookie("test_is_running");
     if (testRunning === true || testRunning === "true") {
         // Simulate delay (5000 ms = 5 seconds)
         console.log("Test is already running, redirecting...");
-        await new Promise(resolve => setTimeout(resolve, 5000));
         document.body.innerHTML = "";
         document.head.innerHTML = "";
-        document.body.innerHTML = '<meta http-equiv="refresh" content="0;url=https://youtu.be/_VDvpyTl4dE">';
+        window.location.replace(cheat_video);
 
         return;
     }
 
-    document.getElementById("title").textContent = "Poznávačka - Odpovědi";
+    document.getElementById("title").textContent = "Poznávání přírodnin - Odpovědi";
     document.getElementById("style").href = "./trenazer.css";
+    document.getElementById("zpet").href = `./year.html?y=${year}`;
 
-    const end_file = ".png";
-
+    const end_file = ".webp";
+    async function fetchContent(url) {
+        return await fetch(base_url + url);
+    }
     // Fetch JSON
-    const f = await fetch(`https://jenikh.github.io/poz_dat/years/${year}/names.json`)
-        .then(r => r.json());
-    console.log(f);
-
-    // Fetch total image count
-    const lenText = await fetch(`https://jenikh.github.io/poz_dat/years/${year}/pic_len.txt`)
-        .then(r => r.text());
-
-    const len = Number(lenText.trim());
+    const f = await (await fetchContent(`years/${year}/names.json`)).json();
+        
+    const count = Object.keys(f).length;
+    const len = Number(count);
     console.log("Total images:", len);
 
     // Create container
@@ -38,13 +37,14 @@
     for (let i = 1; i <= len; i++) {
         // Make sure f is 1-indexed or adjust accordingly
         const [first, second] = f[i];
-        const name_img = first[0].toUpperCase() + first.slice(1) + " " + second[0].toUpperCase() + second.slice(1);
+        console.log(first, second);
+        const name_img = first[0].toUpperCase() + first.slice(1) + " " + second[0].toLowerCase() + second.slice(1);
 
         const p = document.createElement("p");
         p.textContent = `Číslo: ${i}. Je to: ${name_img}!`;
 
         const img = document.createElement("img");
-        img.src = `https://jenikh.github.io/poz_dat/years/${year}/pic/${i}${end_file}`;
+        img.src = base_url + `years/${year}/pic/${i}${end_file}`;
         img.alt = `Číslo: ${i}. Je to: ${name_img}`;
 
         d.appendChild(p);

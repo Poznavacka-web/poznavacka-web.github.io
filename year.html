@@ -2,25 +2,35 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" id="style" href="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="title">Načítání...</title>
+    <link rel="icon" href="icon.png">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" id="style">
     <script src="./tools.js"></script>
 </head>
 <body>
-    <h1 id="title_h1">Počkejte prosím...</h1>
-
-    <div id="select">
-        <button type="button" id="b_select">Klikněte na mě pro zobrazení seznamu</button>
-
-        <!-- Fixed closing tags and indentation -->
-        <div id="list_b" style="display: none;">
-            <button type="button" id="b_odpovedi">Zvířata + Odpovědi</button>
-            <button type="button" id="b_trenazer">Trenažer</button>
+    <header class="panel">
+        <div class="container" id="cnt">
+            <h2 id="title_h1" class="title">Počkejte prosím...</h2>
+            <a href="./roky.html" class="button" id="zpet">Zpět</a>
+            <br>
+            <br>
+            <br>
+            <nav id="select" class="button-container">
+                
+                <div id="list_b">
+                    <button type="button" id="b_odpovedi">Přírodniny</button>
+                    <button type="button" id="b_trenazer">Trenažer</button>
+                </div>
+            </nav>
         </div>
-    </div>
-
-    <!-- Scripts at the end for better loading -->
+    </header>
+    <main class="container">
+        <div id="content_b" class="hidden">
+            <input type="button" value="Ověřit" id="Check" class="button">
+        </div>
+    </main>
     <script src="./year.js" id="script_year"></script>
 </body>
 </html>
