@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="./ILOVEYOU.webp">
     <title>Poděkování a kontribuce</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
 </head>
 <body>
     <div class="container text-center">
@@ -19,15 +23,25 @@
             <h2>Poděkování</h2>
             
             <p style="color: white;">Programování: <strong style="color: black;">Jan Hanus</strong></p>
-            <p style="color: white;">Nápady a řežie: <strong style="color: black;">Iva Feltlová</strong></p>
+            <p style="color: white;">Nápady a režie: <strong style="color: black;">Iva Feltlová</strong></p>
             <h2>Speciální poděkování</h2>
             <ul>
-                <li>Pan ředitel</li>
-                <li>Paní učitelka Prušková</li>
+                <p style="display: none;" id="counter">0</p>
+                <li onclick="
+  document.getElementById('counter').textContent =
+    parseInt(document.getElementById('counter').textContent) + 1;
+  document.getElementById('rdtl').textContent =
+    document.getElementById('counter').textContent + 'X';
+">
+  Pan ředitel
+  <strong><span id="rdtl" onchange=""></span></strong>
+</li>
+
+                <li>Paní vychovatelka Prušková</li>
                 <li onclick="//document.getElementById('pice').setAttribute('style', '');">Iva Hanusová</li>
                 <li style="display: none;" id="pice"><a href="https://www.popeyeschicken.cz/cs/">Popeyes</a></li>
                 <li><a href="https://www.github.com/">Github</a></li>
-                <li>A... <strong onclick="document.getElementById('debug').style = ''">Vy!</strong> Protože se koukáte na tuto stránku, která mi trvala udělat 2 týdny!</li>
+                <li>A... <strong onclick="document.getElementById('debug').style = ''">Vy!</strong> Protože se koukáte na tuto stránku!</li>
                 
             </ul>
             <div id="debug" style="display: none;">
@@ -37,5 +51,41 @@
 
         </main>
     </div>
+    <div class="too_small" style=" padding: 10px; display: none">
+  <p style="color: yellow; -webkit-text-stroke: 0.5px black; font-size: 115px;">Ale ne!</p>
+  <p style="font-size: 50;color: magenta">vaše</p>
+  <p style="color: rgb(0, 225, 255); font-size: 100px;">Obrazovka</p>
+  <p style="color: red; font-size: 50px;">je moc malá</p>
+  <p style="color: aqua; font-size: 25px;">na zobrazení obsahu!</p>
+</div>
+<script>
+const tooSmall = document.querySelector('.too_small');
+const contentR = document.querySelector('#content-roky');
+const content = document.querySelector(".container");
+
+function checkSize() {
+    // Example: consider "too small" if width < 800p
+    contentR.style.display = 'block';
+    content.style.display = 'block';
+    const isSquished = content.clientWidth < 800 || contentR.clientWidth < 800;
+    contentR.style.display = 'block';
+    content.style.display = 'block';
+    if (isSquished) {
+        tooSmall.style.display = 'block';
+        contentR.style.display = 'none';
+        content.style.display = 'none';
+    } else {
+        tooSmall.style.display = 'none';
+        contentR.style.display = 'block';
+        content.style.display = 'block';
+    }
+}
+
+// Check on load
+checkSize();
+
+// Optional: Check on window resize
+window.addEventListener('resize', checkSize);
+</script>
 </body>
 </html>

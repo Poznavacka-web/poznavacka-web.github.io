@@ -8,7 +8,7 @@
     <script src="./tools.js"></script>
 </head>
 <body class="cheating-page">
-    <main>
+    <main class="c">
         <h1 id="flash_red_blue">Neoprávněný přístup! učitel to zjistí za <strong id="countdown">10</strong> <span id="sekund_text">Sekund!</span></h1>
     </main>
     <script>
@@ -22,19 +22,29 @@
                 setCookie("test_is_running", false, 1);
                 setCookie("c_count", "0", 365);
                 history.back()
+
             }
         }
         var flsh_state = false;
         var countdown = 10;
         var flsh = document.getElementById("flash_red_blue");
-
+        flsh.style.backgroundColor = "red";
+        var title = document.getElementById("title");
+        title.textContent = "POZOR CHEATOVÁNÍ DETEKOVÁNO!";
         var countdownElement = document.getElementById("countdown");
         countdownElement.textContent = countdown;
         var countdownInterval = setInterval(function() {
+            if (countdown == 10) {
+                title.textContent = "";
+            }
+            if (countdown <= -1) {
+                window.location.href = "./roky.html"
+            }
             countdown--;
+            
+            title.textContent += " " + countdown + "...";
             countdownElement.textContent = countdown;
             if (countdown <= 0) {
-                clearInterval(countdownInterval);
                 history.back()
             }
             if (flsh_state == false) {
@@ -47,11 +57,42 @@
             if (countdown <= 4) {
                 if (countdown != 1) {document.getElementById("sekund_text").textContent = "Sekundy!";}
                 else {document.getElementById("sekund_text").textContent = "Sekunda!";}
-            } else if (countdown == 0) {
+            }
+            if (countdown == 0) {
                 document.getElementById("sekund_text").textContent = "Sekund!";
             }
-        
         }, 1000);
     </script>
+    <div class="too_small" style=" padding: 10px; display: none">
+  <p style="color: yellow; -webkit-text-stroke: 0.5px black; font-size: 115px;">Ale ne!</p>
+  <p style="font-size: 50;color: magenta">vaše</p>
+  <p style="color: rgb(0, 225, 255); font-size: 100px;">Obrazovka</p>
+  <p style="color: red; font-size: 50px;">je moc malá</p>
+  <p style="color: aqua; font-size: 25px;">na zobrazení obsahu!</p>
+</div>
+<script>
+const tooSmall = document.querySelector('.too_small');
+const content = document.getElementsByClassName("c")
+
+function checkSize() {
+    // Example: consider "too small" if width < 800p
+    content.style.display = 'block';
+    const isSquished = content.clientWidth < 800
+    content.style.display = 'block';
+    if (isSquished) {
+        tooSmall.style.display = 'block';
+        content.style.display = 'none';
+    } else {
+        tooSmall.style.display = 'none';
+        content.style.display = 'block';
+    }
+}
+
+// Check on load
+checkSize();
+
+// Optional: Check on window resize
+window.addEventListener('resize', checkSize);
+</script>
 </body>
 </html>

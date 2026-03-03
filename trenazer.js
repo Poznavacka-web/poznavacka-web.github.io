@@ -388,9 +388,7 @@ async function main() {
         exit.style.backgroundColor = "red";
         exit.style.color = "white";
         exit.onclick = async () => {
-            if (!await createYesNoAlert("Opravdu chcete ","ukončit test?")) {
-                return;
-            }
+            
             if (exit.value == "Super tajné talčítko!") {
                 await createAlertGood("BAM STŘÍLEČKA V KÓDU!")
                 var s = document.createElement('script')
@@ -406,6 +404,9 @@ async function main() {
                     element.style.display = "";
                 }
                 
+                return;
+            }
+            if (!await createYesNoAlert("Opravdu chcete ","ukončit test?")) {
                 return;
             }
             setCookie("test_is_running", false, 1);
@@ -466,11 +467,13 @@ async function main() {
             };
             const comment = active.innerHTML.split(`<!--[`)[1]?.split(`]-->`)[0];
             
-            const [correctFirst, correctSecond] = comment.split(`,`);
+            let [correctFirst, correctSecond] = comment.split(`,`);
             const answer = input.value.trim().toLowerCase().split(` `);
             log(answer);
             log(correctFirst);
             log(correctSecond);
+            correctFirst = correctFirst.charAt(0).toUpperCase() + correctFirst.slice(1);
+            correctSecond = correctSecond.toLocaleLowerCase()
             let bad_answer_1 = false;
             let bad_answer_2 = false;
             if (answer[0] == `tajemstvi`) {
@@ -575,11 +578,6 @@ async function main() {
 }
 
 async function force_complete_ins() {
-    if (false && !click_button) {
-        await createAlert(`Pouze po kliknutí na tlačítko s odpovědí`);
-        return;
-    }
-    
     const year = getParam(`y`);
     let f = await fetchContent(`years/${year}/names.json`)
     let totalQuestions = await get_len_img(f)
@@ -593,4 +591,4 @@ async function force_complete_ins() {
 }
 log(document.readyState);
 
-main(); // If trenazer.js is injected after DOM is ready, this is safe
+main();
