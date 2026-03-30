@@ -369,6 +369,11 @@ async function main() {
         document.body.appendChild(d);
         //#endregion Box Handle
         //#region 
+        const points = document.createElement(`p`);
+        points.textContent = "0/" + toString(totalQuestions * 2);
+        points.id = `points`;
+
+        document.body.appendChild(points);
         const input = document.createElement(`input`);
         input.id = `input`;
         input.autocorrect = `off`;

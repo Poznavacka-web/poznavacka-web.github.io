@@ -56,7 +56,9 @@ async function main() {
         document.getElementById("b_trenazer").addEventListener("click", () => {
             goToWeb(`./year.html?y=${year}&trenazer=true`);
         });
-
+        document.getElementById("b_choice").addEventListener("click", () => {
+            goToWeb(`./choicetest.html?y=${year}`);
+        })
     } else if (trenazerParam === "false") {
         const select = document.getElementById("select");
         if (select) select.remove();

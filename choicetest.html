@@ -23,7 +23,64 @@
     </div>
     <script src="./choice.js"></script>
     <div class="container text-center">
-        <button type="button">Potvrdit!</button>
+        <button type="button" id="submit">Potvrdit!</button>
+        <input type="submit" value="Konec" class="button" style="background-color: red; color: white;" id="exit">
+        <script>
+            let exit = document.getElementById("exit");
+            async function createYesNoAlert(message,str_msg="") {
+    return new Promise(resolve => {
+        const alertDiv = document.createElement("div");
+        alertDiv.className = "custom-alert";
+
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "alert-message";
+        const strong = document.createElement("strong");
+        strong.textContent = str_msg;
+        messageDiv.innerHTML = message + strong.outerHTML;
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'alert-buttons';
+
+        const yesBtn = document.createElement("button");
+        yesBtn.textContent = "Ano";
+        yesBtn.onclick = () => {
+            alertDiv.remove();
+            resolve(true);
+        };
+
+        const noBtn = document.createElement("button");
+        noBtn.textContent = "Ne";
+        noBtn.onclick = () => {
+            alertDiv.remove();
+            resolve(false);
+        };
+
+        buttonContainer.appendChild(yesBtn);
+        buttonContainer.appendChild(noBtn);
+        alertDiv.appendChild(messageDiv);
+        alertDiv.appendChild(buttonContainer);
+        document.body.appendChild(alertDiv);
+    });
+}
+function getParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+            exit.onclick =async function() {
+                let res = await createYesNoAlert("Opravdu chcete ","ukončit trenažer?")
+                if (res) {
+                    if (history.length > 2) {
+                        history.back()
+                    }
+                    else {
+                        window.location.href = "./year.html?y=" + urlParams("y")
+                    }
+                }
+                else {
+                    return;
+                }
+            }
+        </script>
     </div>
     <div class="too_small" style=" padding: 10px; display: none">
   <p style="color: yellow; -webkit-text-stroke: 0.5px black; font-size: 115px;">Ale ne!</p>
@@ -32,34 +89,5 @@
   <p style="color: red; font-size: 50px;">je moc malá</p>
   <p style="color: aqua; font-size: 25px;">na zobrazení obsahu!</p>
 </div>
-<script>
-const tooSmall = document.querySelector('.too_small');
-const contentR = document.querySelector('#content-roky');
-const content = document.querySelector(".container");
-
-function checkSize() {
-    // Example: consider "too small" if width < 800p
-    contentR.style.display = 'block';
-    content.style.display = 'block';
-    const isSquished = content.clientWidth < 800 || contentR.clientWidth < 800;
-    contentR.style.display = 'block';
-    content.style.display = 'block';
-    if (isSquished) {
-        tooSmall.style.display = 'block';
-        contentR.style.display = 'none';
-        content.style.display = 'none';
-    } else {
-        tooSmall.style.display = 'none';
-        contentR.style.display = 'block';
-        content.style.display = 'block';
-    }
-}
-
-// Check on load
-checkSize();
-
-// Optional: Check on window resize
-window.addEventListener('resize', checkSize);
-</script>
 </body>
 </html>

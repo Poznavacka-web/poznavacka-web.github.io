@@ -130,7 +130,7 @@ table, th, td {
 }
 html, body {
     height: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 
@@ -139,6 +139,7 @@ video, embed, img {
     height: auto;
     display: block;
 }
+
 img {
     max-width: 100%;
     max-height: 100vh;
@@ -238,6 +239,22 @@ input[type="button"] {
 
 .hidden {
     display: none;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;   /* 🔥 aligns radio + text vertically */
+    gap: 8px;              /* space between radio and text */
+    margin: 6px 0;
+}
+
+.checkbox-row input[type="radio"] {
+    margin: 0;             /* remove weird browser spacing */
+}
+
+.checkbox-row label {
+    margin: 0;
+    cursor: pointer;
 }
 
 .mensi-pismo {
