@@ -525,7 +525,6 @@ async function main() {
             
             log(ans_1)
             log(ans_2)
-
             if (notifications_bad) {
                 if (bad_answer_1 && bad_answer_2) {
                     button.disabled = true;
@@ -543,6 +542,13 @@ async function main() {
                     createAlertGoodBad("Jedna chyba v prvním jménu","Ale je to správné!")
                 } else if (i_2 == 1) {
                     createAlertGoodBad("Jedna chyba v druhém jménu","Ale je to správné!")
+                } else {
+                    console.log("April code reached")
+                    if (!(randomInt(-1, 1) == 0)) {
+                        button.disabled = true;
+                        await createAlertBad(`Nesprávná odpověď (celá)`);
+                        await createAlertGood("Apríl!!!")
+                    }
                 }
             }
 
@@ -563,6 +569,7 @@ async function main() {
                 if (await createYesNoAlert(`Chcete znovu pustit test?`)) {
                     location.reload();
                 } else {
+                    history.back();
                     goToWeb(`./roky.html`);
                 }
             } else {
