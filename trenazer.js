@@ -544,11 +544,7 @@ async function main() {
                     createAlertGoodBad("Jedna chyba v druhém jménu","Ale je to správné!")
                 } else {
                     console.log("April code reached")
-                    if (!(randomInt(-1, 1) == 0)) {
-                        button.disabled = true;
-                        await createAlertBad(`Nesprávná odpověď (celá)`);
-                        await createAlertGood("Apríl!!!")
-                    }
+                    
                 }
             }
 
