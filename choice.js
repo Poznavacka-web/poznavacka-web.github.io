@@ -424,7 +424,13 @@ allBoxes.forEach(box => {
             questionDivs[currentQuestion].style.display = "block";
         } else {
             createAlert("🎉 Hotovo!")
-            
+            setTimeout(
+                function() {
+                    history.back()
+                }
+                , 1000
+            )
+            return;
         }
     };
 

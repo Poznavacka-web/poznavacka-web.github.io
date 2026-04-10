@@ -381,7 +381,13 @@ async function main() {
         const points = document.createElement(`p`);
         points.textContent = "0/" + totalQuestions * 2;
         points.id = `points`;
-
+        points.className = `bodyP`;
+        setInterval(() => {
+    const el = document.getElementById("points");
+    if (el && !el.classList.contains("bodyP")) {
+        el.classList.add("bodyP");
+    }
+}, 100);
         document.body.appendChild(points);
         const input = document.createElement(`input`);
         input.id = `input`;
