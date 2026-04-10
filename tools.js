@@ -8,7 +8,6 @@ const scr = document.createElement("script");
 scr.src = "settings.js";  // Corrected from .scr to .src
 scr.id = "script_settings";
 document.head.appendChild(scr);
-
 function setCookie(name, value, days) {
   let expires = "";
   if (days) {

@@ -76,8 +76,7 @@ const content = document.getElementsByClassName("c")
 
 function checkSize() {
     // Example: consider "too small" if width < 800p
-    content.style.display = 'block';
-    const isSquished = content.clientWidth < 800
+    content.style.display = 'block';const isSquished = content.clientWidth < 800
     content.style.display = 'block';
     if (isSquished) {
         tooSmall.style.display = 'block';

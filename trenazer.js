@@ -93,8 +93,9 @@ async function get_len_img(content) {
         log("Count: ",count )
         lengthf = Number(count);
         if (lengthf == 0) { 
-            log("Freak mode enabled!")
-            return 0
+            console.trace("Freak mode enabled!")
+            
+            return 0;
         }
         log("Total images:", lengthf);
         
@@ -270,6 +271,15 @@ function create_img(i) {
 }
 function getParam(name) {
     const url = new URL(window.location.href);
+    if (url.searchParams.get(name) == null) {
+        return undefined;
+    }
+    if (name == "y") {
+        if (isNaN(Number(url.searchParams.get(name)))) {
+            console.warn("Bad Year")
+            return -1;
+        }
+    }
     return url.searchParams.get(name);
 }
 function get_pic_url(i) {
@@ -292,6 +302,9 @@ async function fetchContent(url) {
             }
             try {
                 const response = await fetch(base_url + url);
+                if (!response.ok) {
+                    return {};
+                }
                 return await response.json();
             } catch (e) {
                 log("Chyba při načítání nebo parsování JSON:", e);
@@ -318,11 +331,7 @@ async function main() {
         setCookie("streak",Math.round(getCookie("streak")),1)
         if (getCookie("streak") == 1) {
             createAlertGood("Velmi dobře!\nMáte jedno kompletně správné cvičení za sebou.")
-            if (await createYesNoAlert("Baví vás to?")) {
-                createAlert("Děkujeme!")
-            } else {
-                createAlert("Děkujeme i tak!\nNic se nezmění!\n (Ani by se nezměnilo)")
-            }
+            
         }
         else if (getCookie("streak") == 2) {
             createAlertGood("Velmi dobře!\nMáte dvě kompletně správná cvičení za sebou.")
@@ -370,7 +379,7 @@ async function main() {
         //#endregion Box Handle
         //#region 
         const points = document.createElement(`p`);
-        points.textContent = "0/" + toString(totalQuestions * 2);
+        points.textContent = "0/" + totalQuestions * 2;
         points.id = `points`;
 
         document.body.appendChild(points);
@@ -433,6 +442,7 @@ async function main() {
 
         button.onclick = async () => {
             input.focus()
+            
             let active = document.querySelector(`.active`);
             if (!active) {
                 button.disabled = false;
@@ -580,6 +590,7 @@ async function main() {
                 input.focus();
                 setCookie(`test_is_running`, true, 1);
             }
+            points.textContent = `${score}/${totalQuestions * 2}`;
 
         };
     })();

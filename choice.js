@@ -61,8 +61,8 @@ function getRandomName(keys, cannot_be_again, allData) {
         const key = keys[Math.floor(Math.random() * keys.length)];
         fake = allData[key];
         a++;
-        if (a > 100) { 
-            return ["POZOR: Generovací error se stal! -_-\n","s**t"]
+        if (a > 100) {
+            return ["POZOR: Generovací error se stal! -_-\n"," "]
         } else {
             if (a % 10 == 0) { 
                 log(a)
@@ -247,7 +247,8 @@ async function createYesNoAlert(message,str_msg="") {
 //#region Hlavní Funkce
 async function main() {
     log(`Trenázer v1.2.0 - Startování`);
-
+    
+    
     const year = getParam(`y`); 
     if (!year) {
         createAlert("Chybí rok v URL! (?y=...)");
@@ -260,7 +261,11 @@ async function main() {
         window.location.href = "/"
         return;
     }
-
+    if (isNaN(Number(year))) {
+        await createAlertBad("Nepodařilo se načíst Otázky a odpovědi!");
+        window.location.href = "/"
+        return;
+    }
     const keys = Object.keys(f);
     const len = keys.length;
 
@@ -306,7 +311,8 @@ async function main() {
 
         // zamíchání
         options.sort(() => Math.random() - 0.5);
-
+        const maxBody = options.length;
+        
         // 🔹 VYKRESLENÍ
         options.forEach((optValue, j) => {
             const row = document.createElement("div");
@@ -354,10 +360,12 @@ async function main() {
         questionDivs.push(questionDiv);
         container.appendChild(questionDiv);
     }
-
+    const bodyElem = document.getElementById("bodyP");
+    let body = 0;
+    bodyElem.textContent = body + "/" + totalQuestions;
     let submit = document.getElementById("submit");
     let awaiting_another_click = false;
-    let body = 0;
+    
     submit.onclick = () => {
         const activeDiv = questionDivs[currentQuestion];
         if (!activeDiv) {
@@ -392,6 +400,8 @@ allBoxes.forEach(box => {
         if (selectedNormalized == normalized) {
             body = body + 1;
             log(body)
+            bodyElem.textContent = body + "/" + totalQuestions;
+
         }
     } else {
         label.textContent = "❌";
