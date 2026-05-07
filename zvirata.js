@@ -4,7 +4,7 @@
     const cheat_video = "./nenene.html"
     const year = getParam(`y`);
     const testRunning = getCookie("test_is_running");
-    if (testRunning === true || testRunning === "true") {
+    if (testRunning === true || testRunning === "true" && false) {
         // Simulate delay (5000 ms = 5 seconds)
         console.log("Test is already running, redirecting...");
         document.body.innerHTML = "";
